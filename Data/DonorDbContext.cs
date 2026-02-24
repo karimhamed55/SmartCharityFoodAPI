@@ -1,4 +1,5 @@
 ﻿using charityAPI.Models;
+using CharityApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
@@ -12,5 +13,6 @@ namespace charityAPI.Data
 
         }
         public DbSet<Donor> Donors { get; set; }
+        public DbSet<FoodDonation> FoodDonations { get; set; }
     }
 }

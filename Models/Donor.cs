@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CharityApi.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace charityAPI.Models
 {
@@ -12,5 +13,6 @@ namespace charityAPI.Models
         public string City { get; set; } = string.Empty;
 
         public DateTime CreatedAT { get; set; }
+        public ICollection<FoodDonation> FoodDonations { get; set; }
     }
 }
