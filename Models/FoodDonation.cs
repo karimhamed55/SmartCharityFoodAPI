@@ -23,5 +23,6 @@ namespace CharityApi.Models
         public DateTime ExpiryDate { get; set; }
 
         public string Status { get; set; } = "Available";
+        public ICollection<DistributionRequest> DistributionRequests { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using charityAPI.Data;
 
@@ -11,9 +12,11 @@ using charityAPI.Data;
 namespace CharityApi.Migrations
 {
     [DbContext(typeof(DonorDbContext))]
-    partial class DonorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260224233056_AddDistributionRequests")]
+    partial class AddDistributionRequests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

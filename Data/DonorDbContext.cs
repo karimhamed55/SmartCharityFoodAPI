@@ -14,5 +14,6 @@ namespace charityAPI.Data
         }
         public DbSet<Donor> Donors { get; set; }
         public DbSet<FoodDonation> FoodDonations { get; set; }
+        public DbSet<DistributionRequest> DistributionRequests { get; set; }
     }
 }
