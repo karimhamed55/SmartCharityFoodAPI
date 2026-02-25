@@ -1,13 +1,12 @@
 ﻿using charityAPI.Data;
 using CharityApi.DTO;
 using CharityApi.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CharityApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/food-donations")]
     [ApiController]
     public class FoodDonationsController : ControllerBase
     {
@@ -18,7 +17,6 @@ namespace CharityApi.Controllers
             _context = context;
         }
 
-        
         [HttpPost]
         public async Task<IActionResult> Create(FoodDonationCreateDTO dto)
         {
@@ -42,35 +40,63 @@ namespace CharityApi.Controllers
             _context.FoodDonations.Add(donation);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new { id = donation.Id }, donation);
+            var response = new FoodDonationResponseDTO
+            {
+                Id = donation.Id,
+                DonorId = donation.DonorId,
+                FoodType = donation.FoodType,
+                Quantity = donation.Quantity,
+                ExpiryDate = donation.ExpiryDate,
+                Status = donation.Status
+            };
+
+            return CreatedAtAction(nameof(GetById), new { id = donation.Id }, response);
         }
 
-       
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var donations = await _context.FoodDonations
                 .Include(d => d.Donor)
+                .Select(d => new FoodDonationResponseDTO
+                {
+                    Id = d.Id,
+                    DonorId = d.DonorId,
+                    DonorName = d.Donor != null ? d.Donor.Name : "Unknown",
+                    FoodType = d.FoodType,
+                    Quantity = d.Quantity,
+                    ExpiryDate = d.ExpiryDate,
+                    Status = d.Status
+                })
                 .ToListAsync();
 
             return Ok(donations);
         }
 
-        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var donation = await _context.FoodDonations
+            var d = await _context.FoodDonations
                 .Include(d => d.Donor)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
-            if (donation == null)
+            if (d == null)
                 return NotFound("Donation not found");
 
-            return Ok(donation);
+            var response = new FoodDonationResponseDTO
+            {
+                Id = d.Id,
+                DonorId = d.DonorId,
+                DonorName = d.Donor != null ? d.Donor.Name : "Unknown",
+                FoodType = d.FoodType,
+                Quantity = d.Quantity,
+                ExpiryDate = d.ExpiryDate,
+                Status = d.Status
+            };
+
+            return Ok(response);
         }
 
-       
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, FoodDonationCreateDTO dto)
         {
@@ -86,10 +112,9 @@ namespace CharityApi.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(donation);
+            return NoContent();
         }
 
-        
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

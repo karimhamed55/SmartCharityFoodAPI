@@ -51,7 +51,18 @@ namespace CharityApi.Controllers
         {
             var requests = await _context.DistributionRequests
                 .Include(x => x.FoodDonation)
+                .Select(request => new DistributionRequestResponseDto
+                {
+                    Id = request.Id,
+                    FoodDonationId = request.FoodDonationId,
+                    TargetName = request.TargetName,
+                    RequestedQuantity = request.RequestedQuantity,
+                    Status = request.Status,
+                    RequestedAt = request.RequestedAt,
+                    FoodType = request.FoodDonation.FoodType
+                })
                 .ToListAsync();
+
             return Ok(requests);
         }
 
@@ -64,9 +75,20 @@ namespace CharityApi.Controllers
 
             if(request == null) 
                 return NotFound("Request not found");
+            var response = new DistributionRequestResponseDto
+            {
+                Id = request.Id,
+                FoodDonationId = request.FoodDonationId,
+                TargetName = request.TargetName,
+                RequestedQuantity = request.RequestedQuantity,
+                Status = request.Status,
+                RequestedAt = request.RequestedAt,
+                FoodType = request.FoodDonation?.FoodType ?? "Unknown"
+            };
 
-            return Ok(request);
+            return Ok(response);
         }
+        
 
         [HttpPatch("{id}/status")]
         public async Task<IActionResult> UpdateStatus(int id,UpdateStatusDto dto)

@@ -17,7 +17,7 @@ namespace charityAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Donor>> CreateDonor(DonorPostDTO donorDto)
+        public async Task<ActionResult<Donor>> CreateDonor([FromBody]DonorPostDTO donorDto)
         {
             var donor = new Donor
             {
